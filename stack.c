@@ -1,16 +1,25 @@
+/**
+ * COPYRIGHT
+ * AUTHOR: Li-Chi, Chang
+ * 
+ * descreption:
+ * This is stack
+ * simply use push, pop
+ * but befor using, please init a base, or it will has error
+*/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include "stack.h"
 
 int stackerr(int);
 
-int initStack = 0;
-
 // init for this stack
-stackBase* initStackInt()
+stackBase* initStackBase()
 {
-    initStack = 1;
     stackBase* base = malloc(sizeof(stackBase));
+    if(base == NULL)
+        stackerr(STACKALLOCATIONERR);
     base->count = 0;
     base->next = NULL;
     return base;
@@ -22,15 +31,10 @@ stackBase* initStackInt()
  * */
 int push(stackBase* base, stackData data)
 {
-    if(!initStack)
-    {
-        return stackerr(NOINITSTACKERR);
-    }
-
     stackNode *newNode = (stackNode*) malloc(sizeof(stackNode));
     if(newNode == NULL)
     {
-        return stackerr(ALLOCATIONERR);
+        return stackerr(STACKALLOCATIONERR);
     }
 
     if(base->next == NULL)
@@ -45,7 +49,6 @@ int push(stackBase* base, stackData data)
             pointerNode = pointerNode->next;
         }
         pointerNode->next = newNode;
-        newNode->prev = pointerNode;
     }
     newNode->data = data;
     newNode->next = NULL;
@@ -57,31 +60,30 @@ stackData pop(stackBase* base)
 {
     stackData data;
 
-    if(!initStack)
+    if(base->count > 1)
     {
-        stackerr(NOINITSTACKERR);
-        return data;
-    }
-
-    if(base->count != 0)
-    {
-        base->count--;
-        stackNode* pointerNode = base->next;
-        while(pointerNode->next != NULL)
+        stackNode* pointer = base->next;
+        int i = base->count;
+        for(i = base->count; i > 1; i--)
         {
-            pointerNode = pointerNode->next;
+            pointer = pointer->next;
         }
-        pointerNode->prev->next = NULL;
-        data = pointerNode->data;
-        base->count--;
-        free(pointerNode);
-        return data;
+        data = (pointer->data);
+        free(pointer);
+    }
+    else if(1)
+    {
+        stackNode* pointer = base->next;
+        data = pointer->data;
+        free(pointer);
     }
     else
     {
         stackerr(STACKEMPTY);
         return data;
     }
+    base->count--;
+    return data;
 }
 
 int getStackLen(stackBase* base)
@@ -89,9 +91,16 @@ int getStackLen(stackBase* base)
     return base->count;
 }
 
-/**
- * 
- */
+int freeStack(stackBase* base)
+{
+    while (base->count != 0)
+    {
+        pop(base);
+    }
+    free(base);
+    return 0;
+}
+
 int stackerr(int errcode)
 {
     if(errcode == 0)
@@ -102,14 +111,11 @@ int stackerr(int errcode)
     printf("Error here.\nerr code: ");
     switch (errcode)
     {
-    case NOINITSTACKERR:
-        printf("%d NO INIT STACK ERR!\n",errcode);
-        break;
     case STACKEMPTY:
         printf("%d STACK EMPTY!\n",errcode);
         break;
-    case ALLOCATIONERR:
-        printf("%d ALLOCATION ERR!\n",errcode);
+    case STACKALLOCATIONERR:
+        printf("%d STACK ALLOCATION ERR!\n",errcode);
         break;
     default:
         printf("unknown %d\n",errcode);
