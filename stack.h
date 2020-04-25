@@ -10,7 +10,11 @@
 
 typedef struct stackData
 {
-    unsigned int integer;
+    //the location of this node
+    unsigned int locationX;
+    unsigned int locationY;
+    //the next dir, like travelDir = NORTH;
+    char travelDir;
 }stackData;
 
 // struct for the stack

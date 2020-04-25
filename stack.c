@@ -71,7 +71,7 @@ stackData pop(stackBase* base)
         data = (pointer->data);
         free(pointer);
     }
-    else if(1)
+    else if(base->count == 1)
     {
         stackNode* pointer = base->next;
         data = pointer->data;
