@@ -42,14 +42,14 @@ stackBase* initStackBase();
  * input: the stack base, data in unsigned int format
  * output: 0:success, 1 err
  */
-int push(stackBase*, stackData);
+int pushStack(stackBase*, stackData);
 
 /**
  * descreption: pop the top layer of this stack
  * input: the stack base
  * output: data in unsigned int
  */
-stackData pop(stackBase*);
+stackData popStack(stackBase*);
 
 /**
  * descreption: get the length of this stack

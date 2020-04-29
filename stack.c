@@ -29,7 +29,7 @@ stackBase* initStackBase()
  * return 0: success
  * return 1: error on stack
  * */
-int push(stackBase* base, stackData data)
+int pushStack(stackBase* base, stackData data)
 {
     stackNode *newNode = (stackNode*) malloc(sizeof(stackNode));
     if(newNode == NULL)
@@ -56,7 +56,7 @@ int push(stackBase* base, stackData data)
     return 0;
 }
 
-stackData pop(stackBase* base)
+stackData popStack(stackBase* base)
 {
     stackData data;
 
@@ -95,7 +95,7 @@ int freeStack(stackBase* base)
 {
     while (base->count != 0)
     {
-        pop(base);
+        popStack(base);
     }
     free(base);
     return 0;
